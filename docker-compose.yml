@@ -1,19 +1,40 @@
 version: '3'
 services:
-   webserver:
+   ubuntu_14:
+      container_name: webserver${NAME_PREFIX}
+      stdin_open: true
+      tty: true
       build: ./
-      container_name: webserver
       ports:
-        - "8080:80"
+        - '${APACHE2_HTTP_PORT}:80'
+        - '${SSH_PORT}:22'
       restart: unless-stoped
+      volumes:
+        - '${SITE_VOLUME}:/var/www/injdor.ru'
+        - '${SITE2_VOLUME}:/var/www/volodin73.ru'
    mariadb:
-     image: mariadb 
-     restart:unless-stoped
-     container_name: mariadb
-
-   phpmyadmin:
-      image: 
-      container_name: phpmyadmin
+      image: mariadb 
       restart: unless-stoped
-      ports: '8081:80'
-     
+      container_name: mariadb${NEW_PREFIX}
+      stdin_open: true
+      tty: true
+      command: '--max_allowed_packed=3205856'
+      environment:
+         MYSQL_ROOTPASSWORD: '${MYSQL_ROOT_PASSWORD}'
+         MYSQL_DATABASE: '${MYSQL_DATABASE}'
+         MYSQL_USER: '${MYSQL_USER}'
+         MYSQL_PQSSWORD: '${MYSQL_PASSWORD}'
+      ports: '${MYSQL_PORT}:3306'
+      volumes:
+         - '${MYSQL_VOLUME}:/varlib/mysql'
+   
+   phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin${NAME_PREFIX}
+      restart: unless-stoped
+      ports: '${PHPMYADMIN_PRT}:80'
+      environment:
+         PMA_HOST: mariadb
+         MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
+         UPLOAD_LOMIT: 3000000000
+      depends_on: 
