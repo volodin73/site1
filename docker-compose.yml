@@ -6,6 +6,14 @@ services:
       ports:
         - "8080:80"
       restart: unless-stoped
-   db:
-     image: 
-       
+   mariadb:
+     image: mariadb 
+     restart:unless-stoped
+     container_name: mariadb
+
+   phpmyadmin:
+      image: 
+      container_name: phpmyadmin
+      restart: unless-stoped
+      ports: '8081:80'
+     
