@@ -1,13 +1,14 @@
 FROM ubuntu:14.04
 
 WORKDIR /var/www/volodin73.ru
- 
+
 RUN apt-get update && apt-get install -y \
    apache2 \
    apache2-utils \
    software-properties-common \
    python-software-properties \
    curl \
+   nano \
    mc \
    htop \
    git \
@@ -20,6 +21,7 @@ RUN apt-get update && apt-get install -y \
    make \
    libxml2-dev \
    libmysqlclient-dev \
+   mcrypt \
   && rm -rf /var/lib/apt/list/*
 
 RUN apt-get update && apt-get install -y \
@@ -32,9 +34,12 @@ RUN apt-get update && apt-get install -y \
     php5-mysql \
     php5-xmlrpc \
     php5-cgi \
+    libmcrypt-dev \
+    libreadline-dev \
   && rm -rf /var/lib/apt/list/*
 
-    
+RUN echo "extention=mcrypt.so" >> /etc/php5/apache2/php.ini \
+   && echo "extention=mcrypt.so" >> /etc/php5/cli/php.ini     
 RUN  a2enmod php5 rewrite headers && service  apache2 restart
  
 COPY ./config/injdor.conf  /etc/apache2/sites-available/
@@ -51,7 +56,7 @@ COPY  ./volodin73.ru  .
 COPY ./injdor.ru /var/www/injdor.ru
 
 #Install composer
-#RUN curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer && composer install
+RUN curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer 
 
 EXPOSE 80
 EXPOSE 22

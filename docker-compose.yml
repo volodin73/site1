@@ -26,6 +26,7 @@ services:
          MYSQL_USER: '${MYSQL_USER}'
          MYSQL_PASSWORD: '${MYSQL_PASSWORD}'
          MYSQL_ALLOW_EMPTY_PASSWORD: '${MYSQL_ALLOW_EMPTY_PASSWORD}'
+#      command: 'mysqld --initialize --user=mysql --basedir=/usr --datadir=/var/lib/mysql'
       ports: 
         - '${MYSQL_PORT}:3306'
       volumes:
@@ -42,8 +43,8 @@ services:
          PMA_HOST: mysql
          MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
          UPLOAD_LIMIT: 3000000000
-         PMA_CONTROLUSER: '$PMA_CONTROLUSER'
-         PMA_CONTROLPASS: '$PMA_CONTROLPASS'
+#        PMA_USER: '$PMA_USER'
+#         PMA_PASSWORD: '$PMA_PASSWORD'
       depends_on: 
         - 'mysql'
       links:
